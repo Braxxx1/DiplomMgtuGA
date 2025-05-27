@@ -1,8 +1,8 @@
 Gender,Customer Type,Age,Type of Travel,Class,Flight Distance,Inflight wifi service,Departure/Arrival time convenient,Ease of Online booking,Gate location,Food and drink,Online boarding,Seat comfort,Inflight entertainment,On-board service,Leg room service,Baggage handling,Checkin service,Inflight service,Cleanliness,Departure Delay in Minutes,Arrival Delay in Minutes,satisfaction
-Male,Loyal Customer,41,Business travel,Eco,303,5,3,3,3,5,5,5,5,4,3,3,5,5,5,0,0.0,satisfied
-Female,Loyal Customer,18,Business travel,Business,391,1,5,5,5,1,1,1,1,4,3,3,1,4,1,17,17.0,neutral or dissatisfied
-Female,Loyal Customer,13,Personal Travel,Eco Plus,569,2,4,2,3,1,2,1,1,5,4,4,5,5,1,0,0.0,neutral or dissatisfied
-Male,disloyal Customer,23,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,Loyal Customer,,Business travel,Eco,303,5,3,3,3,5,5,5,5,4,3,3,5,5,5,0,0.0,satisfied
+Female,Loyal Customer,,Business travel,Business,391,1,5,5,5,1,1,1,1,4,3,3,1,4,1,17,17.0,neutral or dissatisfied
+Female,Loyal Customer,,Personal Travel,Eco Plus,569,2,4,2,3,1,2,1,1,5,4,4,5,5,1,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
 Male,Loyal Customer,23,Personal Travel,Business,83,4,5,0,3,5,0,5,5,3,5,4,3,5,5,0,0.0,neutral or dissatisfied
 Male,Loyal Customer,52,Business travel,Eco,319,3,5,4,5,3,3,3,3,3,4,4,3,3,3,74,71.0,neutral or dissatisfied
 Female,Loyal Customer,49,Business travel,Business,2159,2,1,1,1,5,4,3,2,2,2,2,4,2,4,0,0.0,neutral or dissatisfied
@@ -1499,3 +1499,13 @@ Male,Loyal Customer,44,Business travel,Business,1562,3,3,3,3,4,5,5,5,5,5,5,5,5,3
 Male,Loyal Customer,40,Business travel,Business,3246,5,5,5,5,2,5,4,4,4,4,4,4,4,3,0,0.0,satisfied
 Male,Loyal Customer,33,Business travel,Business,3512,0,0,0,2,3,3,3,3,3,2,2,4,3,3,0,1.0,satisfied
 Female,disloyal Customer,36,Business travel,Business,430,3,3,3,4,5,3,5,5,5,4,4,4,4,5,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,1111,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,1231,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
+Male,disloyal Customer,2111,Business travel,Eco,109,1,0,1,1,3,1,1,3,2,5,5,3,1,3,0,0.0,neutral or dissatisfied
