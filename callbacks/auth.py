@@ -1,8 +1,9 @@
-#pip install bcrypt
 import mysql.connector
 from dash import Input, Output, State, no_update
 import bcrypt
 from dash.exceptions import PreventUpdate
+from callbacks.db import get_connection
+
 
 def register_auth_callbacks(app):
     @app.callback(
@@ -15,24 +16,13 @@ def register_auth_callbacks(app):
     prevent_initial_call=True
     )
     def register_user(n, name, email, password, role):
-        print("⚙️ Коллбэк сработал")
 
         if not all([name, email, password, role]):
-            print("❌ Не все поля заполнены")
             return "⚠️ Пожалуйста, заполните все поля."
 
         try:
-            print("🔌 Подключаемся к MySQL...")
-            conn = mysql.connector.connect(
-                host="127.0.0.1",
-                user="root",
-                password="KAgdeckeywukMe0",
-                database="analizeprog",
-                port=3306,
-                connection_timeout=5
-            )
+            conn = get_connection()
             cursor = conn.cursor()
-            print("✅ Соединение установлено")
 
             cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
             if cursor.fetchone():
@@ -51,7 +41,6 @@ def register_auth_callbacks(app):
 
         except Exception as e:
             import traceback
-            print("❌ Ошибка:", e)
             traceback.print_exc()  # Это покажет полный стек ошибки
             return f"❌ Ошибка: {e}"
 
@@ -60,6 +49,5 @@ def register_auth_callbacks(app):
             try:
                 cursor.close()
                 conn.close()
-                print("🔒 Соединение закрыто")
             except:
                 pass

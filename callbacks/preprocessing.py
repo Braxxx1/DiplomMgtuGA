@@ -1,11 +1,10 @@
 # callbacks/preprocessing.py
-from dash import Input, Output, State, no_update, html, dcc, ctx, callback_context
-import pandas as pd
-from dash.dcc import send_data_frame
-from dash import dash_table
 import dash_bootstrap_components as dbc
+import pandas as pd
+from dash import (Input, Output, State, callback_context, ctx, dash_table, dcc,
+                  html, no_update)
+from dash.dcc import send_data_frame
 from dash.exceptions import PreventUpdate
-
 
 
 def register_preprocessing_callbacks(app):

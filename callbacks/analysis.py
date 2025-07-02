@@ -1,11 +1,10 @@
 # callbacks/analysis.py
-from dash import Input, Output, State, dcc, html, no_update
+import dash_bootstrap_components as dbc
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
-import dash_bootstrap_components as dbc
-import numpy as np
-from dash import dash_table
+from dash import Input, Output, State, dash_table, dcc, html, no_update
 
 
 def register_analysis_callbacks(app):

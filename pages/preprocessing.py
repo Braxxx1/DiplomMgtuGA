@@ -1,5 +1,5 @@
-from dash import html, dcc
 import dash_bootstrap_components as dbc
+from dash import dcc, html
 
 layout = dbc.Container([
     dcc.Store(id="data-store", storage_type="local"),

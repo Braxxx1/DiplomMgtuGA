@@ -1,8 +1,9 @@
 # callbacks/upload.py
-from dash import Input, Output, State, html, dash_table, no_update
-import pandas as pd
 import base64
 import io
+
+import pandas as pd
+from dash import Input, Output, State, dash_table, html, no_update
 
 
 def register_upload_callbacks(app):

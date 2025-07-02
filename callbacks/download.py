@@ -1,7 +1,7 @@
 # callbacks/download.py
+import pandas as pd
 from dash import Input, Output, State, no_update
 from dash.dcc import send_data_frame
-import pandas as pd
 
 
 def register_download_callbacks(app):
