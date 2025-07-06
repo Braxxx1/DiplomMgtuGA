@@ -1,33 +1,32 @@
+# pages/register.py
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-layout = dbc.Container([
-    html.H3("📝 Регистрация пользователя", className="mb-4"),
+layout = html.Div(
+    dbc.Container([
+        html.Div([
+            html.H3("🎓 Регистрация студента", className="text-center mb-4"),
 
-    dbc.Row([
-        dbc.Col([
-            dbc.Label("Имя:"),
-            dbc.Input(id="reg-name", type="text", placeholder="Иван Иванов", className="mb-3"),
+            dbc.Label("Имя"),
+            dbc.Input(id="reg-name", placeholder="Иван Иванов", className="mb-3"),
 
-            dbc.Label("Email:"),
+            dbc.Label("Email"),
             dbc.Input(id="reg-email", type="email", placeholder="you@example.com", className="mb-3"),
 
-            dbc.Label("Пароль:"),
+            dbc.Label("Пароль"),
             dbc.Input(id="reg-password", type="password", placeholder="••••••••", className="mb-3"),
 
-            dbc.Label("Роль:"),
-            dcc.Dropdown(
-                id="reg-role",
-                options=[
-                    {"label": "Студент", "value": "student"},
-                    {"label": "Преподаватель", "value": "teacher"}
-                ],
-                placeholder="Выберите роль",
-                className="mb-4"
-            ),
+            dbc.Label("Группа"),
+            dcc.Dropdown(id="reg-group", placeholder="Выберите группу", className="mb-3"),
 
-            html.Button("✅ Зарегистрироваться", id="reg-submit", className="btn btn-success"),
-            html.Div(id="reg-message", className="mt-3")
-        ], width=6)
-    ])
-], fluid=True)
+            dbc.Button("Зарегистрироваться", id="reg-submit", color="success", className="w-100 mt-2"),
+            html.Div(id="reg-message", className="mt-3 text-center"),
+
+            html.Div([
+                html.Span("Уже есть аккаунт? "),
+                dcc.Link("Войти", href="/login")
+            ], className="mt-3 text-center")
+
+        ], className="p-4 rounded shadow bg-white", style={"width": "100%", "maxWidth": "400px"})
+    ], className="d-flex justify-content-center align-items-center", style={"height": "100vh"})
+)
