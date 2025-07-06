@@ -19,7 +19,7 @@ layout = html.Div(
             dbc.Label("Группа"),
             dcc.Dropdown(id="reg-group", placeholder="Выберите группу", className="mb-3"),
 
-            dbc.Button("Зарегистрироваться", id="reg-submit", color="success", className="w-100 mt-2"),
+            dbc.Button("Зарегистрироваться", id="reg-submit", color="primary", className="w-100 mt-2"),
             html.Div(id="reg-message", className="mt-3 text-center"),
 
             html.Div([
