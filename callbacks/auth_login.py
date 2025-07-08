@@ -22,19 +22,18 @@ def register_login_callbacks(app):
         try:
             conn = get_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT id, name, password_hash, role FROM users WHERE email = %s", (email,))
-            print("select")
+            cursor.execute("SELECT id, name, password_hash, role, group_id FROM users WHERE email = %s", (email,))
             row = cursor.fetchone()
             cursor.close()
 
             if not row:
                 return "❌ Пользователь не найден", no_update, no_update
 
-            user_id, name, password_hash, role = row.values()
+            user_id, name, password_hash, role, group_id = row.values()
             if not bcrypt.checkpw(password.encode(), password_hash.encode()):
                 return "❌ Неверный пароль", no_update, no_update
 
-            user_data = {"id": user_id, "name": name, "role": role}
+            user_data = {"id": user_id, "name": name, "role": role, "group_id": group_id}
             redirect_url = "/profile" if role == "teacher" else "/profile"
 
             return "", user_data, redirect_url
@@ -60,7 +59,6 @@ def register_login_callbacks(app):
         Input("current-user", "data")
     )
     def update_header(user):
-        print("🧠 Header user =", user)
         if not user:
             return ""
 

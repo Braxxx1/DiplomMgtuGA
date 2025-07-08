@@ -12,9 +12,10 @@ app.config.suppress_callback_exceptions = True
 server = app.server
 
 app.layout = html.Div([
+        dcc.Location(id="url"),
         dcc.Store(id="data-store", storage_type="local"),
         dcc.Store(id="current-user", storage_type="local"),
-        dcc.Location(id="url"),
+        
 
         html.Div(id="header-bar"),  # будет обновляться в коллбэке
 

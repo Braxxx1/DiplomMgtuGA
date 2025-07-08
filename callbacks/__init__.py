@@ -6,6 +6,7 @@ from .upload import register_upload_callbacks
 from .auth_login import register_login_callbacks
 from .profileCall import register_profile_callbacks
 from .routes import register_routes_callbacks
+from .test_page import register_test_callbacks
 
 
 def register_callbacks(app):
@@ -17,3 +18,4 @@ def register_callbacks(app):
     register_login_callbacks(app)
     register_profile_callbacks(app)
     register_routes_callbacks(app)
+    register_test_callbacks(app)

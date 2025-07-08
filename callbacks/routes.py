@@ -1,6 +1,6 @@
 # callbacks/auth_login.py
 from dash import Input, Output, no_update
-from pages import dashboard, preprocessing, register, login, profile
+from pages import dashboard, preprocessing, register, login, profile, test
 
 
 def register_routes_callbacks(app):
@@ -13,7 +13,6 @@ def register_routes_callbacks(app):
     )
     def route_pages(path, user):
         protected = ["/dashboard", "/preprocessing"]
-        print(user, path)
         # Нельзя пускать на защищенные страницы без авторизации
         if path in protected and not user:
             if path != "/login":
@@ -30,7 +29,9 @@ def register_routes_callbacks(app):
             return login.layout, no_update
         elif path == "/profile" and user:
             return profile.layout, path
-
+        elif 'test' in path and user:
+            return test.layout, path
+        
         # fallback
         if not user:
             if path != "/login":

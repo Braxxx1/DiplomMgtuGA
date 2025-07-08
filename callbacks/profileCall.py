@@ -1,8 +1,65 @@
 from dash import Input, Output, html, State, dcc
+from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 from callbacks.db import get_connection  # если используешь DB
 from datetime import datetime
 import pymysql
+
+
+def load_pending_reviews(teacher_id):
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT 
+                ts.test_id,
+                ts.student_id,
+                ts.submitted_at,
+                t.title,
+                u.name AS student_name
+            FROM test_status ts
+            JOIN tests t ON ts.test_id = t.id
+            JOIN users u ON ts.student_id = u.id
+            WHERE t.check_type = 'manual'
+              AND ts.status = 'pending'
+              AND t.created_by = %s
+            ORDER BY ts.submitted_at DESC
+        """, (teacher_id,))
+        rows = cursor.fetchall()
+        return rows
+    except Exception as e:
+        print("Ошибка при загрузке ожидающих проверок:", e)
+        return []
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def render_pending_reviews(reviews):
+    if not reviews:
+        return html.P("Нет тестов на проверку.", className="text-muted")
+
+    cards = []
+    for item in reviews:
+        cards.append(
+            dbc.Card([
+                dbc.CardBody([
+                    html.H5(item["title"], className="card-title"),
+                    html.P(f"Студент: {item['student_name']}"),
+                    html.P(f"Дата сдачи: {item['submitted_at']}"),
+                    dcc.Link(
+                        dbc.Button("Проверить", color="primary"),
+                        href=f"/check?id={item['test_id']}&student={item['student_id']}"
+                    )
+                ])
+            ], className="mb-3 shadow")
+        )
+
+    return html.Div([
+        html.Hr(),
+        html.H5("📝 Работы на проверку", className="mt-4"),
+        *cards
+    ])
 
 
 def register_profile_callbacks(app):
@@ -24,11 +81,16 @@ def register_profile_callbacks(app):
 
         # Если студент — просто возвращаем карточку
         if user["role"] != "teacher":
-            return profile_card
+            student_tests = html.Div(id="student-tests")
+            return html.Div([profile_card, html.Hr(), student_tests])
+
+        if user["role"] == "teacher":
+            reviews = load_pending_reviews(user["id"])  # функция получения данных из БД
+            review_block = render_pending_reviews(reviews)
 
         # Если преподаватель — добавим форму создания теста
         form = html.Div([
-            profile_card,
+            # profile_card,
             html.Hr(),
             dbc.Row([
                 dbc.Col([
@@ -75,27 +137,15 @@ def register_profile_callbacks(app):
                 ])
             ])
 
-        # # Вставляется в register_profile_callbacks, внутрь show_profile()
-        # add_question_block = html.Div([
-        #     html.Hr(),
-        #     html.H5("Добавить вопрос в тест"),
-            
-        #     dbc.Label("Выберите тест:"),
-        #     dcc.Dropdown(id="question-test-select", className="mb-2"),
-            
-        #     dbc.Label("Текст вопроса:"),
-        #     dbc.Textarea(id="question-text", className="mb-2"),
-            
-        #     dbc.Label("Правильный ответ (если автопроверка):"),
-        #     dbc.Input(id="question-answer", type="text", className="mb-2"),
-            
-        #     dbc.Button("➕ Добавить вопрос", id="add-question-btn", color="primary"),
-        #     html.Div(id="add-question-msg", className="mt-2")
-        # ])
-
-
         # return html.Div([profile_card, form])
-        return html.Div([form])
+        return html.Div(dbc.Card([
+                        profile_card,
+                        dbc.Row([
+                            dbc.Col(form, width=7),
+                            dbc.Col(review_block, width=5)
+                        ])
+                    ], style={"width": "200%"}))
+
 
     @app.callback(
         Output("create-test-msg", "children"),
@@ -137,23 +187,14 @@ def register_profile_callbacks(app):
     prevent_initial_call=True
 )
     def load_teacher_groups(_, user):
-        print(123)
         if not user or user["role"] != "teacher":
             return []
 
         try:
             conn = get_connection()
-            print(23)
-
             cursor = conn.cursor()  # 🛠 ВАЖНО
-            print(44)
             cursor.execute("SELECT id, name FROM student_groups")
-            # cursor.execute("SELECT id, name FROM student_groups WHERE teacher_id = %s", (user["id"],))
-            print(55)
-
             rows = cursor.fetchall()
-            print(66)
-            print([{"label": r["name"], "value": r["id"]} for r in rows])
             return [{"label": r["name"], "value": r["id"]} for r in rows]
         except Exception as e:
             print("Ошибка при загрузке групп преподавателя:", e)
@@ -210,6 +251,54 @@ def register_profile_callbacks(app):
         except Exception as e:
             print("Ошибка при добавлении вопроса:", e)
             return f"❌ Ошибка: {e}"
+        finally:
+            cursor.close()
+            conn.close()
+
+
+    @app.callback(
+        Output("student-tests", "children"),
+        Input("profile-info", "children"),
+        Input("current-user", "data")
+    )
+    def load_tests_for_student(_, user):
+        if not user or user["role"] != "student":
+            raise PreventUpdate
+
+        try:
+            conn = get_connection()
+            cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+            cursor.execute("""
+                SELECT t.id, t.title, t.description, ts.status
+                FROM tests t
+                LEFT JOIN test_status ts ON ts.test_id = t.id AND ts.student_id = %s
+                WHERE t.group_id = %s
+            """, (user["id"], user["group_id"]))
+
+            tests = cursor.fetchall()
+            if not tests:
+                return html.P("Нет доступных тестов.")
+
+            cards = []
+            for test in tests:
+                status = test["status"] or "не начат"
+                cards.append(
+                    dbc.Card([
+                        dbc.CardBody([
+                            html.H5(test["title"]),
+                            html.P(test["description"]),
+                            html.P(f"Статус: {status}"),
+                            dcc.Link("📄 Пройти", href=f"/test?id={test['id']}", className="btn btn-sm btn-primary")
+                        ])
+                    ], className="mb-3")
+                )
+
+            return cards
+
+        except Exception as e:
+            print("Ошибка при загрузке тестов:", e)
+            return html.Div("❌ Не удалось загрузить тесты.")
         finally:
             cursor.close()
             conn.close()
